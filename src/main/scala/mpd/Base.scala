@@ -101,7 +101,7 @@ trait Base {
           case OK() => out.right
           case x => readEnd(out :+ x)
 	}
-      
+
       try {
         readEnd(Vector.empty) match {
 	  case \/-(x) => (s, x).right
@@ -120,7 +120,7 @@ trait Base {
       (s copy (flushed = true), ())
     }
   }
-  
+
   /** helpers */
 
   /** disconnect and connect */
@@ -144,7 +144,7 @@ trait Base {
     x <- f
     _ <- clend
   } yield x
-  
+
   /** write and read
     * more specifically:
     * clear, write in command list, flush and read */
@@ -160,14 +160,14 @@ trait Base {
 
 trait BaseInstances {
   /** MPD with explicit MPDFailure */
-  final object MPDF extends StateTFunctions with StateTInstances {
+  final object MPDF extends StateTInstances with StateTFunctions {
     def apply[A](f: MPDS => MPDFailure \/ (MPDS, A)): MPD[A] = new MPD[A] {
       def apply(s: MPDS) = f(s)
     }
   }
 
   /** MPD using try catch */
-  final object MPD extends StateTFunctions with StateTInstances {
+  final object MPD extends StateTInstances with StateTFunctions {
     /** match exception to MPDFailure */
     def handleException(e: Exception) = e match {
       case t: ConnectException => MPDTimeout(t.toString).left
@@ -176,8 +176,8 @@ trait BaseInstances {
 
     def apply[A](f: MPDS => (MPDS, A)): MPD[A] = new MPD[A] {
       def apply(s: MPDS) =
-	try { 
-          f(s).right 
+	try {
+          f(s).right
         } catch {
           case e: Exception => handleException(e)
         }
@@ -185,7 +185,7 @@ trait BaseInstances {
   }
 
   implicit val baseImplicit: Base = new Base { }
-  
+
   val OKStr = "OK"
   val ACKStr = "ACK"
   val BuffSize = 1024

@@ -1,4 +1,6 @@
-mpd-monad
+mpd-scala
 =========
 
-MPD Client written in Scala.
+MPD client library written in Scala.
+
+
